@@ -14,9 +14,12 @@ let collection1, collection2, db;
 async function dbConnect() {
   const url = process.env.MONGODB_URI;
   const client = new MongoClient(url);
-
-  await client.connect();
-  console.log("Connected successfully to database");
+  
+  try {
+    await client.connect();
+  } catch (error) {
+    console.error(error);
+  }
   db = client.db(process.env.DBNAME);
   collection1 = db.collection("users");
 }
