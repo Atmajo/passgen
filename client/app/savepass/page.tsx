@@ -29,7 +29,7 @@ const page = async () => {
 
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
-    axios.post("http://localhost:3500/signup", form).then((res) => {
+    axios.post("https://passgen-server.vercel.app/signup", form).then((res) => {
       console.log(res.data);
     });
   };
