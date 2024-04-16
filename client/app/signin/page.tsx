@@ -7,7 +7,7 @@ import "../globals.css";
 
 const page = () => {
   const router = useRouter();
-  const [cookies, setCookies, removeCookies] = useCookies(["user"]);
+  const [cookies, setCookies, removeCookies] = useCookies(["user", "token"]);
 
   const [form, setForm] = React.useState({
     email: "",
@@ -24,10 +24,11 @@ const page = () => {
   
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
-    const data = await axios.get("http://localhost:3500/signin", { params: form }).then((res) => {
+    const data = await axios.get("https://passgen-zqcd.onrender.com/signin", { params: form }).then((res) => {
         return res.data;
     });
-    setCookies("user", data.token, { path: "/" });
+    setCookies("user", data.username, { path: "/" });
+    setCookies("token", data.token, { path: "/" });
     router.push("/");
   };
   

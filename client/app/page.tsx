@@ -10,7 +10,7 @@ export default function Home() {
   const [pasLength, setPasLength] = React.useState(16);
   const [password, setPassword] = React.useState("");
   const [isCopied, setIsCopied] = React.useState(false);
-  const [cookies, setCookies, removeCookies] = useCookies(["user"]);
+  const [cookies, setCookies, removeCookies] = useCookies(["user", "token"]);
 
   const keys =
     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
@@ -24,11 +24,11 @@ export default function Home() {
   };
 
   const copied = async () => {
-    new ClipboardJS("#password", {
-      text: function (trigger) {
-        return (trigger as HTMLElement).innerText;
-      },
-    });
+    var element = document.getElementById("password") as HTMLInputElement;
+    if (element) {
+      element.select();
+      document.execCommand("copy");
+    }
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
   };
@@ -50,8 +50,6 @@ export default function Home() {
     </button>
   );
 
-  new ClipboardJS("button");
-
   return (
     <HydrationProvider>
       <Client>
@@ -60,14 +58,14 @@ export default function Home() {
             <div className="flex justify-around items-center gap-2 p-2 py-6 border-b">
               <h1 className="text-2xl font-bold">PassGen</h1>
               <div className="flex justify-center items-center gap-5">
-                {cookies.user ? (
+                {cookies.token ? (
                   <a href="/savepass" className="button flex">
                     <h1>Save Passwords</h1>
                   </a>
                 ) : (
                   ""
                 )}
-                {cookies.user ? logout : login}
+                {cookies.token ? logout : login}
               </div>
             </div>
           </nav>
@@ -75,12 +73,13 @@ export default function Home() {
             <div>
               <div className="flex gap-3 items-center p-2">
                 <div className="flex justify-start items-center overflow-auto w-56 p-2 px-3 border border-white rounded-lg scroll">
-                  <h1
+                  <input
+                    type="text"
                     id="password"
                     className="border-none outline-none text-gray-400 bg-transparent select-text"
-                  >
-                    {password ? password : "Password"}
-                  </h1>
+                    defaultValue={password}
+                    placeholder="Password"
+                  />
                 </div>
                 <button
                   className="p-2 border border-green-600 rounded-lg"

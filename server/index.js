@@ -99,7 +99,7 @@ app.post("/signup", async (request, response) => {
 
 app.get('/savedpass', async (request, response) => {
   try {
-    collection2 = db.collection(`${request.body.username}`);
+    collection2 = db.collection(`${request.query.username}`);
     const pass = await collection2.find().toArray();
     response.status(200).json(pass);
   } catch (err) {
