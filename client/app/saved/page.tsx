@@ -49,7 +49,7 @@ const page = () => {
 
   const handleDelete = async (id: any) => {
     try {
-      await axios.delete("http://localhost:3500/deletepass", {
+      await axios.delete("https://passgen-zqcd.onrender.com/deletepass", {
         params: { username: cookies.user, _id: id },
       });
       window.location.reload();
