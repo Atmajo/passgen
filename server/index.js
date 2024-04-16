@@ -4,15 +4,26 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { MongoClient } = require("mongodb");
 require("dotenv").config();
+
+let collection1, collection2, db;
+const fs = require('fs');
+const yaml = require('js-yaml');
+
+let envVariables;
+try {
+  envVariables = yaml.load(fs.readFileSync('.env.yml', 'utf8'));
+} catch (err) {
+  console.log(err);
+}
+
 const app = express();
-const port = process.env.PORT || 4000;
+const port = envVariables.production.PORT || 4000;
 
 app.use(express.json());
 app.use(cors());
-let collection1, collection2, db;
 
 async function dbConnect() {
-  const url = process.env.MONGODB_URI;
+  const url = envVariables.production.MONGODB_URI;
   const client = new MongoClient(url);
   
   try {
@@ -20,7 +31,7 @@ async function dbConnect() {
   } catch (error) {
     console.error(error);
   }
-  db = client.db(process.env.DBNAME);
+  db = client.db(envVariables.production.DBNAME);
   collection1 = db.collection("users");
 }
 
