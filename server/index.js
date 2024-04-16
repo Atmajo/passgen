@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { MongoClient } = require("mongodb");
+const { MongoClient, ObjectId } = require("mongodb");
 require("dotenv").config();
 
 let collection1, collection2, db;
@@ -131,6 +131,17 @@ app.post("/savepass", async (request, response) => {
   } catch (err) {
     console.log(err);
     response.status(500).json({ message: err });
+  }
+});
+
+app.delete("/deletepass", async (request, response) => {
+  try {
+    collection2 = db.collection(`${request.query.username}`);
+    await collection2.deleteOne({ _id: new ObjectId(request.query._id) });
+    response.status(200).json({ message: "Password Deleted" });
+  } catch (err) {
+    console.log(err);
+    response.json({ message: err });
   }
 });
 
